@@ -84,9 +84,9 @@ impl Kernel {
         };
         unsafe {
             let c_name_bytes = c_name.as_bytes_with_nul();
-            // let c_name_i8: &[i8] = std::mem::transmute(c_name_bytes);
+            let c_name_i8: &[i8] = std::mem::transmute(c_name_bytes);
             let name_len = std::cmp::min(c_name_bytes.len(), mb.name.len());
-            mb.name[..name_len].copy_from_slice(&c_name_bytes[..name_len]);
+            mb.name[..name_len].copy_from_slice(&c_name_i8[..name_len]);
             mb.pid = self.pid;
             let res = ioctl(self.fd, OP_MODULE_BASE, &mut mb);
             if res == 0 {
